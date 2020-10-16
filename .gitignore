@@ -1,0 +1,27 @@
+# ignore editer
+*.sublime-project
+*.sublime-workspace
+.vscode/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+*.swp
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.exe
