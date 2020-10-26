@@ -29,9 +29,19 @@ func deleteDuplicatesHelp(head *ListNode) {
 
 	if head.Val == head.Next.Val {
 		head.Next = head.Next.Next
-	} else {
-		head = head.Next
 	}
-	deleteDuplicatesHelp(head)
+	deleteDuplicatesHelp(head.Next)
 	return
+}
+
+func deleteDuplicatesHelpII(head *ListNode) *ListNode { // time: O(N)
+	if head == nil || head.Next == nil {
+		return head
+	}
+
+	if head.Next != nil && head.Val == head.Next.Val {
+		return deleteDuplicatesHelp(head.Next)
+	}
+	head.Next = deleteDuplicatesHelp(head.Next)
+	return head
 }
