@@ -82,7 +82,7 @@ func MergeKListsII(lists []*ListNode) *ListNode { // time: O(n+m) * O(nlogn)
 }
 
 // MergeKListsIII non-recursive
-func MergeKListsIII(lists []*ListNode) *ListNode {
+func MergeKListsIII(lists []*ListNode) *ListNode { // time: O(k*N)
 	if len(lists) == 0 {
 		return nil
 	}
@@ -90,8 +90,8 @@ func MergeKListsIII(lists []*ListNode) *ListNode {
 		return lists[0]
 	}
 	dummy := &ListNode{}
-	for i := 0; i < len(lists); i++ {
-		dummy.Next = mergeTwoLists(dummy.Next, lists[i])
+	for i := 0; i < len(lists); i++ { // time: O(k)
+		dummy.Next = mergeTwoLists(dummy.Next, lists[i]) // time: O(N)
 	}
 	return dummy.Next
 }
