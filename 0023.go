@@ -78,7 +78,7 @@ func MergeKListsII(lists []*ListNode) *ListNode { // time: O(n+m) * O(nlogn)
 		return mergeTwoLists(lists[0], lists[1]) // time: O(n+m)
 	}
 	m := n / 2
-	return MergeKListsII(mergeKLists(lists[0:m]), mergeKLists(lists[m:]))
+	return mergeTwoLists(MergeKListsII(lists[0:m]), MergeKListsII(lists[m:]))
 }
 
 // MergeKListsIII non-recursive
