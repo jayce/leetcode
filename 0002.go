@@ -31,40 +31,56 @@ func popValueAndNext(root *ListNode) (*ListNode, int) {
 	return root.Next, root.Val
 }
 
+// Second idea
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	return addTwoNumbersHelp(l1, l2, 0)
 }
 
-func addTwoNumbersHelp(l1, l2 *ListNode, remain int) *ListNode { // time: O(min(N,M))
-	if l1 == nil && l2 == nil {
-		if remain > 0 {
-			return &ListNode{Val: remain}
-		}
+// space: O(1), time: O(min(N, M))
+func addTwoNumbersHelp(l1, l2 *ListNode, remain int) *ListNode {
+	if l1 == nil && l2 == nil && remain == 0 {
 		return nil
 	}
 
-	if l1 == nil {
-		if remain == 0 {
-			return l2
-		}
-		sum := l2.Val + remain
-		l2.Val = sum % 10
-		l2.Next = addTwoNumbersHelp(l1, l2.Next, sum/10)
-		return l2
+	v1, v2 := l1, l2
+	if l1 != nil {
+		l1 = l1.Next
+	}
+	if l2 != nil {
+		l2 = l2.Next
 	}
 
-	if l2 == nil {
-		if remain == 0 {
-			return l1
-		}
-		sum := l1.Val + remain
-		l1.Val = sum % 10
-		l1.Next = addTwoNumbersHelp(l1.Next, l2, sum/10)
-		return l1
+	if v2 == nil {
+		v2 = &ListNode{}
+	}
+	if v1 == nil {
+		v1 = v2
 	}
 
-	sum := l1.Val + l2.Val + remain
-	l1.Val = sum % 10
-	l1.Next = addTwoNumbersHelp(l1.Next, l2.Next, sum/10)
-	return l1
+	v1.Val = v1.Val + v2.Val + remain
+	v1.Next = addTwoNumbersHelp(l1, l2, v1.Val/10)
+	v1.Val = v1.Val % 10
+	return v1
+}
+
+// space: O(max(N, M)), time: O(max(N, M))
+func addTwoNumbersHelpII(l1, l2 *ListNode, remain int) *ListNode {
+	if l1 == nil && l2 == nil && remain == 0 {
+		return nil
+	}
+
+	v1, v2 := 0, 0
+	if l1 != nil {
+		v1, l1 = l1.Val, l1.Next
+	}
+
+	if l2 != nil {
+		v2, l2 = l2.Val, l2.Next
+	}
+
+	sum := v1 + v2 + remain
+	return &ListNode{
+		Val:  sum % 10,
+		Next: addTwoNumbersHelp(l1, l2, sum/10),
+	}
 }
