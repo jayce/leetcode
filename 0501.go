@@ -19,7 +19,7 @@ func findMode(root *TreeNode) []int { // time: O(2N)
 		maxRepeat = max(maxRepeat, repeat)
 	})
 
-	repeat = 0
+	repeat, root = 0, nil
 	dfs(root, func(root *TreeNode) { // time: O(N)
 		if last != nil && last.Val != root.Val {
 			repeat = 0
