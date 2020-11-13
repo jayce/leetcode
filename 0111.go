@@ -4,6 +4,7 @@
 
 package leetcode
 
+// minDepth First idea
 func minDepth(root *TreeNode) int { // time: O(N)
 	if root == nil {
 		return 0
@@ -22,4 +23,31 @@ func min(a, b int) int {
 		return b
 	}
 	return a
+}
+
+// Second idea
+func minDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	depth := 0
+	aqueue := []*TreeNode{root} // space: O(minDepth)
+	bqueue := []*TreeNode{}     // space: O(minDepth)
+	for len(aqueue) > 0 {       // time: O(N)
+		depth++
+		bqueue = bqueue[:0]
+		for _, node := range aqueue {
+			if node.Left == node.Right { // both nil
+				return depth
+			}
+			if node.Left != nil {
+				bqueue = append(bqueue, node.Left)
+			}
+			if node.Right != nil {
+				bqueue = append(bqueue, node.Right)
+			}
+		}
+		aqueue, bqueue = bqueue, aqueue
+	}
+	return depth
 }
