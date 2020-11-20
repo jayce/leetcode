@@ -45,3 +45,18 @@ func dfs(L, R *Node) {
 	dfs(L.Right, R.Left) // cross
 	return
 }
+
+func connect(root *Node) *Node { // time: O(N)
+	if root == nil {
+		return root
+	}
+	L, R := root.Left, root.Right
+	for L != nil {
+		L.Next = R
+		L = L.Right
+		R = R.Left
+	}
+	connect(root.Left)
+	connect(root.Right)
+	return root
+}
