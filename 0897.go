@@ -105,3 +105,18 @@ func increasingBST(root *TreeNode) *TreeNode {
 	}
 	return lastNode
 }
+
+// bottom-top, insert from list's head always
+func increasingBST(root *TreeNode) *TreeNode {
+	var reverseInorder func(root, head *TreeNode) *TreeNode
+	reverseInorder = func(root, head *TreeNode) *TreeNode { // time: O(N)
+		if root == nil {
+			return head
+		}
+		root.Right = reverseInorder(root.Right, head)
+		newHead := reverseInorder(root.Left, root)
+		root.Left = nil
+		return newHead
+	}
+	return reverseInorder(root, nil)
+}

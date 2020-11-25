@@ -67,3 +67,18 @@ func flatten(root *TreeNode) {
 		root = nil
 	}
 }
+
+// Fourth idea from No.206 ReverseListIII
+func flatten(root *TreeNode) {
+	var postorder func(root, tail *TreeNode) *TreeNode
+	postorder = func(root, tail *TreeNode) *TreeNode { // time: O(N)
+		if root == nil {
+			return tail
+		}
+		root.Right = postorder(root.Right, tail)
+		root.Right = postorder(root.Left, root.Right)
+		root.Left = nil
+		return root
+	}
+	postorder(root, nil)
+}
