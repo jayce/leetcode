@@ -31,7 +31,8 @@ func hasCycle(head *ListNode) bool {
 
 // Third idea
 func hasCycle(head *ListNode) bool { // time: O(N)
-	return hasCycleHelp(&ListNode{Next: head}, dummy.Next)
+	dummy := &ListNode{Next: head}
+	return hasCycleHelp(dummy, dummy.Next)
 }
 
 func hasCycleHelp(slow, fast *ListNode) bool {
