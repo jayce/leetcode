@@ -44,7 +44,17 @@ func kthSmallest(root *TreeNode, k int) int {
 	return kthNode.Val
 }
 
-// BST with Double Linked from leetcode
+// Third idea from leetcode
+func kthSmallest(dummy *TreeLinkedNode, k int) int {
+	for p := dummy.Next; p != dummy; p = p.Next {
+		if k -= 1; k == 0 {
+			return p.Val
+		}
+	}
+	return -1
+}
+
+// BST with Double Linked
 type TreeLinkedNode struct {
 	Val   int
 	Left  *TreeLinkedNode
@@ -53,13 +63,125 @@ type TreeLinkedNode struct {
 	Next  *TreeLinkedNode
 }
 
-func (root *TreeLinkedNode) kthSmallest(k int) int {
-	kth := &TreeLinkedNode{}
-	for p := root; p != nil; p = p.Next {
-		if k -= 1; k == 0 {
-			kth = p
+func NewTreeLinkedNode() *TreeLinkedNode {
+	// dummy.Left is the root of tree
+	dummy := &TreeLinkedNode{}
+	initLink(dummy)
+	return dummy
+}
+
+func (dummy *TreeLinkedNode) Search(val int) *TreeLinkedNode {
+	for p := dummy.Left; p != nil; {
+		switch {
+		case p.Val > val:
+			p = p.Left
+		case p.Val < val:
+			p = p.Right
+		default:
+			return p
+		}
+	}
+	return nil
+}
+
+func (dummy *TreeLinkedNode) Insert(val int) *TreeLinkedNode {
+	p := dummy.Left
+	newNode := &TreeLinkedNode{Val: val}
+
+	if p == nil {
+		dummy.Left = newNode
+		insertLink(dummy, newNode)
+		return newNode
+	}
+
+	for p != nil { // time: O(logN), O(N)
+		if p.Val == val {
+			return p
+		}
+
+		if p.Val > val {
+			if p.Left != nil {
+				p = p.Left
+				continue
+			}
+
+			// p.Left == nil
+			p.Left = newNode
+			break
+
+		} else {
+			if p.Right != nil {
+				p = p.Right
+				continue
+			}
+
+			// p.Right == nil
+			p.Right = newNode
 			break
 		}
 	}
-	return kth.Val
+
+	insertLink(dummy, newNode) // time: O(N)
+	return newNode
+}
+
+func (dummy *TreeLinkedNode) Delete(val int) *TreeLinkedNode {
+	pp := &dummy.Left
+	for *pp != nil && (*pp).Val != val {
+		switch {
+		case (*pp).Val > val:
+			pp = &(*pp).Left
+		case (*pp).Val < val:
+			pp = &(*pp).Right
+		}
+	}
+
+	if (*pp) == nil {
+		return nil
+	}
+
+	target := *pp
+	switch {
+	case (*pp).Left != nil:
+		pp = &(*pp).Left
+		for (*pp).Right != nil {
+			pp = &(*pp).Right
+		}
+		target.Val = (*pp).Val
+		*pp = (*pp).Left
+
+	case (*pp).Right != nil:
+		pp = &(*pp).Right
+		for (*pp).Left != nil {
+			pp = &(*pp).Left
+		}
+		target.Val = (*pp).Val
+		*pp = (*pp).Right
+
+	default:
+		*pp = nil
+	}
+}
+
+func initLink(node *TreeLinkedNode) {
+	node.Prev = node
+	node.Next = node
+}
+
+func removeLink(node *TreeLinkedNode) {
+	node.Prev.Next = node.Next
+	node.Next.Prev = node.Prev
+}
+
+func insertLink(dummy, node *TreeLinkedNode) {
+	p := dummy.Next
+	for p != dummy && p.Val > node.Val {
+		p = p.Next
+	}
+
+	// prev->p->next -> prev->p->node->next
+	node.Prev = p
+	p.Next.Prev = node
+	node.Next = p.Next
+	p.Next = node
 }
